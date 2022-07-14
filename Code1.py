@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 class Data:
     def __init__(file,data):
@@ -17,3 +18,5 @@ df_google = pd.read_csv("GOOG.csv")
 appledata = Data(df_apple)
 googledata = Data(df_google)
 
+plt.plot(appledata.date,appledata.close)
+plt.show()
