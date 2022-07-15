@@ -1,3 +1,4 @@
+from turtle import color
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -18,5 +19,6 @@ df_google = pd.read_csv("GOOG.csv")
 appledata = Data(df_apple)
 googledata = Data(df_google)
 
-plt.plot(appledata.date,appledata.close)
+
+df_google.plot('Date','Close',color = 'red')
 plt.show()
