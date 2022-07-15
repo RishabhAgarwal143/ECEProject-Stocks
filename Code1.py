@@ -16,21 +16,42 @@ class Data:
 df_apple = pd.read_csv("AAPL.csv")
 df_google = pd.read_csv("GOOG.csv")
 
-
-df_close = df_apple[['Close']]
-df_close.set_index(pd.DatetimeIndex(df_apple['Date']),inplace = True)
 appledata = Data(df_apple)
 googledata = Data(df_google)
 
+df_close_apple = df_apple[['Close']]
+df_close_google = df_google[['Close']]
+
+df_close_apple.set_index(pd.DatetimeIndex(df_apple['Date']),inplace = True)
+df_close_google.set_index(pd.DatetimeIndex(df_google['Date']),inplace=True)
+
+
+df_google.plot('Date','Close',color = 'red')
+plt.xlabel('Date')
+plt.ylabel('Close')
+plt.title('Google')
+
 df_apple.plot('Date','Close',color = 'red')
+plt.xlabel('Date')
+plt.ylabel('Close')
+plt.title('Apple')
 
 
-df_close.ta.ema(close ='Close',length =10,append =True)
 
-df_close = df_close.iloc[10:]
-df_close.tail(1000).plot(kind='line')
+df_close_apple.ta.ema(close ='Close',length =10,append =True)
+
+df_close_apple = df_close_apple.iloc[10:]
+df_close_apple.tail(1000).plot(kind='line')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.title('Apple')
+
+df_close_google.ta.ema(close ='Close',length =10,append =True)
+
+df_close_google = df_close_google.iloc[10:]
+df_close_google.tail(1000).plot(kind='line')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.title('Google')
 
 plt.show()
-
-
-
