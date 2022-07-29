@@ -1,6 +1,9 @@
 import pandas as pd
 import pandas_ta as ta
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, r2_score 
 
 class Data:
     def __init__(file,data):
@@ -54,4 +57,22 @@ plt.xlabel('Date')
 plt.ylabel('Price')
 plt.title('Google')
 
+plt.show()
+
+Xtrain, Xtest, ytrain, ytest = train_test_split(df_close_google, df_close_google[['EMA_10']])
+
+Gmodel = LinearRegression().fit(Xtrain,ytrain)
+Gpred = Gmodel.predict(Xtest)
+print("Model Coefficients:", Gmodel.coef_)
+print("Mean Absolute Error:", mean_absolute_error(ytest, Gpred))
+print("Coefficient of Determination:", r2_score(ytest, Gpred))
+yG = [(Gmodel.coef_[0][0]*i) + Gmodel.coef_[0][1] for i in Xtest['Close']]
+xm,Ym = zip(*sorted(zip(Xtest,yG)))
+
+plt.plot(Xtest['Close'],ytest['EMA_10'], '.')
+plt.plot(xm,Ym, '-', label = 'Model')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.title('Model')
+plt.legend()
 plt.show()
