@@ -59,20 +59,50 @@ plt.title('Google')
 
 plt.show()
 
-Xtrain, Xtest, ytrain, ytest = train_test_split(df_close_google, df_close_google[['EMA_10']])
+#Google linear reg model
+def google_model():
+    Xtrain, Xtest, ytrain, ytest = train_test_split(df_close_google[['EMA_10']], df_close_google[['Close']], random_state = 101)
 
-Gmodel = LinearRegression().fit(Xtrain,ytrain)
-Gpred = Gmodel.predict(Xtest)
-print("Model Coefficients:", Gmodel.coef_)
-print("Mean Absolute Error:", mean_absolute_error(ytest, Gpred))
-print("Coefficient of Determination:", r2_score(ytest, Gpred))
-yG = [(Gmodel.coef_[0][0]*i) + Gmodel.coef_[0][1] for i in Xtest['Close']]
-xm,Ym = zip(*sorted(zip(Xtest,yG)))
+    Gmodel = LinearRegression(fit_intercept=False).fit(Xtrain,ytrain)
+    Gpred = Gmodel.predict(Xtest)
+    print("Google Model Coefficients:", Gmodel.coef_)
+    print("Mean Absolute Error:", mean_absolute_error(ytest, Gpred))
+    print("Coefficient of Determination:", r2_score(ytest, Gpred))
 
-plt.plot(Xtest['Close'],ytest['EMA_10'], '.')
-plt.plot(xm,Ym, '-', label = 'Model')
-plt.xlabel('Date')
-plt.ylabel('Price')
-plt.title('Model')
-plt.legend()
-plt.show()
+    yG = [(Gmodel.coef_[0][0])*i for i in Xtest['EMA_10']]
+
+    xm,Ym = zip(*sorted(zip(Xtest['EMA_10'],yG)))
+    xt, yt = zip(*sorted(zip(Xtest['EMA_10'],ytest['Close'])))
+
+    plt.scatter(xt,yt, 5,label = 'Actual', color ='red')
+    plt.plot(xm, Ym, '-', label = 'Model')
+    plt.xlabel('EMA')
+    plt.ylabel('Close')
+    plt.title('Google Model')
+    plt.legend()
+    plt.show()
+
+#Apple Model
+def apple_model():
+    Xtrain, Xtest, ytrain, ytest = train_test_split(df_close_apple[['EMA_10']], df_close_apple[['Close']], random_state = 101)
+
+    Amodel = LinearRegression(fit_intercept=False).fit(Xtrain,ytrain)
+    Apred = Amodel.predict(Xtest)
+    print("Apple Model Coefficients:", Amodel.coef_)
+    print("Mean Absolute Error:", mean_absolute_error(ytest, Apred))
+    print("Coefficient of Determination:", r2_score(ytest, Apred))
+
+    yG = [(Amodel.coef_[0][0])*i for i in Xtest['EMA_10']]
+
+    xm,Ym = zip(*sorted(zip(Xtest['EMA_10'],yG)))
+    xt, yt = zip(*sorted(zip(Xtest['EMA_10'],ytest['Close'])))
+
+    plt.scatter(xt,yt, 5,label = 'Actual', color ='red')
+    plt.plot(xm, Ym, '-', label = 'Model')
+    plt.xlabel('EMA')
+    plt.ylabel('Close')
+    plt.title('Apple Model')
+    plt.legend()
+    plt.show()
+google_model()
+apple_model()
